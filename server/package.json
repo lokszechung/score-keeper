@@ -31,7 +31,6 @@
   "dependencies": {
     "@babel/core": "^7.24.7",
     "@prisma/client": "^5.15.0",
-    "babel-jest": "^29.7.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
