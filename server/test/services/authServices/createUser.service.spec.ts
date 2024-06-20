@@ -1,9 +1,8 @@
 import bcryptjs from 'bcryptjs';
-import { prisma } from '../../../db/prisma';
+import { prisma } from '../../../src/db/prisma';
 import { jest } from '@jest/globals';
-import { createUser } from '../../../services/authServices/createUser';
+import { createUser } from '../../../src/services/authServices/createUser';
 
-// jest.mock('../../../db/prisma');
 jest.mock('bcryptjs');
 
 describe('createUser service tests', () => {
