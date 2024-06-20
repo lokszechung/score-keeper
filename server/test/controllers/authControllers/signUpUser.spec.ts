@@ -1,9 +1,9 @@
 import { jest } from '@jest/globals';
 import { Request, Response } from 'express';
-import { signUpUser } from '../../../controllers/authControllers/signUpUser.controller';
-import { createUser } from '../../../services/authServices/createUser';
+import { signUpUser } from '../../../src/controllers/authControllers/signUpUser.controller';
+import { createUser } from '../../../src/services/authServices/createUser';
 
-jest.mock('../../../services/authServices/createUser');
+jest.mock('../../../src/services/authServices/createUser');
 
 const mockCreateUser = createUser as jest.Mock<typeof createUser>;
 
@@ -74,7 +74,7 @@ describe('signUpUser controller tests', () => {
 
     await signUpUser(req as Request, res as Response);
 
-    expect(createUser).toHaveBeenCalledWith({
+    expect(mockCreateUser).toHaveBeenCalledWith({
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
