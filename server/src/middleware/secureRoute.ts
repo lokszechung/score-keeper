@@ -10,9 +10,11 @@ interface DecodedPayload extends JwtPayload {
 declare global {
 	namespace Express {
 		interface Request {
-			user: {
-				id: string;
-			};
+			user?:
+				| {
+						id: string;
+				  }
+				| undefined;
 		}
 	}
 }
@@ -24,10 +26,16 @@ const secureRoute = async (req: Request, res: Response, next: NextFunction) => {
 			return res.status(401).json({ message: "Unauthorized" });
 		}
 
-		const decodedPayload = jwt.verify(
-			token,
-			process.env.JWT_SECRET!
-		) as DecodedPayload;
+		let decodedPayload;
+		try {
+			decodedPayload = jwt.verify(
+				token,
+				process.env.JWT_SECRET!
+			) as DecodedPayload;
+		} catch (error) {
+			console.error("Error in secureRoute middleware - jwt verify", error);
+			return res.status(401).json({ message: "Unauthorized - Invalid token" });
+		}
 
 		if (!decodedPayload) {
 			return res.status(401).json({ message: "Unauthorized - Invalid token" });

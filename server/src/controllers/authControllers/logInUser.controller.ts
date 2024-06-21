@@ -25,11 +25,11 @@ const logInUser = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "Invalid credentials" });
 		}
 
-		console.log(generateToken(foundUser.id, res));
+		generateToken(foundUser.id, res);
 
 		const { password: _, ...user } = foundUser;
 
-		res.status(200).json(user);
+		return res.status(200).json(user);
 	} catch (error) {
 		console.error("Error in login controller", error);
 		res.status(500).json({ error: "Internal server error" });
