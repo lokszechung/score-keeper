@@ -1,56 +1,59 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt, { JwtPayload } from "jsonwebtoken";
 
-import { Request, Response, NextFunction } from 'express';
-import { prisma } from '../db/prisma';
+import { Request, Response, NextFunction } from "express";
+import prisma from "../db/prisma";
 
 interface DecodedPayload extends JwtPayload {
-  userId: string;
+	userId: string;
 }
 
 declare global {
-  namespace Express {
-    interface Request {
-      user: {
-        id: string;
-      };
-    }
-  }
+	namespace Express {
+		interface Request {
+			user: {
+				id: string;
+			};
+		}
+	}
 }
 
 const secureRoute = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const token = req.cookies.jwt;
-    if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
+	try {
+		const token = req.cookies.jwt;
+		if (!token) {
+			return res.status(401).json({ message: "Unauthorized" });
+		}
 
-    const decodedPayload = jwt.verify(token, process.env.JWT_SECRET!) as DecodedPayload;
+		const decodedPayload = jwt.verify(
+			token,
+			process.env.JWT_SECRET!
+		) as DecodedPayload;
 
-    if (!decodedPayload) {
-      return res.status(401).json({ message: 'Unauthorized - Invalid token' });
-    }
+		if (!decodedPayload) {
+			return res.status(401).json({ message: "Unauthorized - Invalid token" });
+		}
 
-    const user = await prisma.user.findUnique({
-      where: { id: decodedPayload.userId },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-      },
-    });
+		const user = await prisma.user.findUnique({
+			where: { id: decodedPayload.userId },
+			select: {
+				id: true,
+				email: true,
+				firstName: true,
+				lastName: true,
+			},
+		});
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+		if (!user) {
+			return res.status(404).json({ error: "User not found" });
+		}
 
-    req.user = user;
+		req.user = user;
 
-    next();
-  } catch (error) {
-    console.log('Error in secureRoute middleware', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+		next();
+	} catch (error) {
+		console.log("Error in secureRoute middleware", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
 };
 
 export default secureRoute;

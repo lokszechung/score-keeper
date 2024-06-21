@@ -1,41 +1,39 @@
-import { Request, Response } from 'express';
-import bcryptjs from 'bcryptjs';
-import { prisma } from '../../db/prisma';
-import generateToken from '../../utils/generateToken';
+import { Request, Response } from "express";
+import bcryptjs from "bcryptjs";
+import prisma from "../../db/prisma";
+import generateToken from "../../utils/generateToken";
 
 const logInUser = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
+	try {
+		const { email, password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
+		if (!email || !password) {
+			return res
+				.status(400)
+				.json({ message: "All fields are required: email, password" });
+		}
 
-    const user = await prisma.user.findUnique({ where: { email } });
+		const foundUser = await prisma.user.findUnique({ where: { email } });
 
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
+		if (!foundUser) {
+			return res.status(400).json({ message: "Invalid credentials" });
+		}
 
-    const passwordMatch = await bcryptjs.compare(password, user.password);
+		const passwordMatch = await bcryptjs.compare(password, foundUser.password);
 
-    if (!passwordMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
+		if (!passwordMatch) {
+			return res.status(400).json({ message: "Invalid credentials" });
+		}
 
-    generateToken(user.id, res);
+		console.log(generateToken(foundUser.id, res));
 
-    res.status(200).json({
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      createdAt: user.createdAt,
-    });
-  } catch (error) {
-    console.error('Error in login controller', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+		const { password: _, ...user } = foundUser;
+
+		res.status(200).json(user);
+	} catch (error) {
+		console.error("Error in login controller", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
 };
 
 export default logInUser;
