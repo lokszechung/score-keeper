@@ -14,12 +14,81 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id                   String       @id @default(cuid())
   // username  String   @unique
+  firstName            String
+  lastName             String
+  email                String       @unique
+  password             String
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  organisedTournaments Tournament[]
+}
+
+model Tournament {
+  id            String   @id @default(cuid())
+  name          String
+  startDateTime DateTime
+  description   String? // Intended to store HTML content
+  format        Format
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  organiserId   String
+  organiser     User     @relation(fields: [organiserId], references: [id], onDelete: Cascade)
+  teams         Team[]
+  matches       Match[]
+}
+
+model Team {
+  id           String     @id @default(cuid())
+  name         String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  tournamentId String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  players      Player[]
+  homeMatches  Match[]    @relation("HomeTeam")
+  awayMatches  Match[]    @relation("AwayTeam")
+}
+
+model Player {
+  id        String   @id @default(cuid())
   firstName String
   lastName  String
-  email     String   @unique
-  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  teamId String
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+model Match {
+  id           String     @id @default(cuid())
+  kickOff      DateTime
+  matchLength  Int
+  status       Status
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  tournamentId String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  homeTeamId   String
+  homeTeam     Team       @relation("HomeTeam", fields: [homeTeamId], references: [id], onDelete: Cascade)
+  awayTeamId   String
+  awayTeam     Team       @relation("AwayTeam", fields: [awayTeamId], references: [id], onDelete: Cascade)
+  // winnerId     String?
+  // winner       Team?      @relation("Winner", fields: [winnerId], references: [id])
+}
+
+enum Format {
+  ROUND_ROBIN
+  KNOCK_OUT
+  LEAGUE
+  GROUP_KNOCK_OUT
+}
+
+enum Status {
+  PREMATCH
+  IN_PROGRESS
+  FINISHED
+  CANCELLED
 }
