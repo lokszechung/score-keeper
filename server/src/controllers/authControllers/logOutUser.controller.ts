@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-const logOutUser = async (req: Request, res: Response) => {
+const logOutUserController = async (req: Request, res: Response) => {
 	try {
 		res.clearCookie("jwt");
 		res.status(200).json({ message: "Logged out successfully" });
@@ -10,4 +10,4 @@ const logOutUser = async (req: Request, res: Response) => {
 	}
 };
 
-export default logOutUser;
+export default logOutUserController;

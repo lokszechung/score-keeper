@@ -33,7 +33,6 @@ const secureRoute = async (req: Request, res: Response, next: NextFunction) => {
 				process.env.JWT_SECRET!
 			) as DecodedPayload;
 		} catch (error) {
-			console.error("Error in secureRoute middleware - jwt verify", error);
 			return res.status(401).json({ message: "Unauthorized - Invalid token" });
 		}
 

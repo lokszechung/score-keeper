@@ -1,11 +1,13 @@
 import { jest } from "@jest/globals";
 import { Request, Response } from "express";
-import signUpUser from "../../../src/controllers/authControllers/signUpUser.controller";
-import createUser from "../../../src/services/authServices/createUser";
+import signUpUserController from "../../../src/controllers/authControllers/signUpUser.controller";
+import createUserService from "../../../src/services/authServices/createUser.service";
 
-jest.mock("../../../src/services/authServices/createUser");
+jest.mock("../../../src/services/authServices/createUser.service");
 
-const mockCreateUser = createUser as jest.Mock<typeof createUser>;
+const mockCreateUserService = createUserService as jest.Mock<
+	typeof createUserService
+>;
 
 describe("signUpUser controller tests", () => {
 	let res: Partial<Response>;
@@ -35,7 +37,7 @@ describe("signUpUser controller tests", () => {
 			confirmPassword: "password",
 		};
 
-		await signUpUser(req as Request, res as Response);
+		await signUpUserController(req as Request, res as Response);
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
@@ -53,7 +55,7 @@ describe("signUpUser controller tests", () => {
 			confirmPassword: "confirm",
 		};
 
-		await signUpUser(req as Request, res as Response);
+		await signUpUserController(req as Request, res as Response);
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
@@ -70,16 +72,16 @@ describe("signUpUser controller tests", () => {
 			confirmPassword: "password",
 		};
 
-		mockCreateUser.mockResolvedValue({
+		mockCreateUserService.mockResolvedValue({
 			id: 1,
 			firstName: "John",
 			lastName: "Doe",
 			email: "john.doe@example.com",
 		} as never);
 
-		await signUpUser(req as Request, res as Response);
+		await signUpUserController(req as Request, res as Response);
 
-		expect(mockCreateUser).toHaveBeenCalledWith({
+		expect(mockCreateUserService).toHaveBeenCalledWith({
 			firstName: "John",
 			lastName: "Doe",
 			email: "john.doe@example.com",

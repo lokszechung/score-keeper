@@ -8,7 +8,7 @@ type CreateUserData = {
 	password: string;
 };
 
-const createUser = async (createUserData: CreateUserData) => {
+const createUserService = async (createUserData: CreateUserData) => {
 	const { password } = createUserData;
 
 	const salt = await bcryptjs.genSalt(10);
@@ -26,4 +26,4 @@ const createUser = async (createUserData: CreateUserData) => {
 	return user;
 };
 
-export default createUser;
+export default createUserService;

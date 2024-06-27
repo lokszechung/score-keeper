@@ -7,7 +7,8 @@
     "dev": "NODE_ENV=development nodemon ./src/index.ts",
     "test": "NODE_ENV=testing jest",
     "db:push:dev": "NODE_ENV=development ts-node ./src/db/dbpush.ts",
-    "db:push:test": "NODE_ENV=testing ts-node ./src/db/dbpush.ts"
+    "db:push:test": "NODE_ENV=testing ts-node ./src/db/dbpush.ts",
+    "db:push:all": "npm run db:push:dev && npm run db:push:test"
   },
   "keywords": [],
   "author": "",

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import createUser from "../../services/authServices/createUser";
+import createUserService from "../../services/authServices/createUser.service";
 
-const signUpUser = async (req: Request, res: Response) => {
+const signUpUserController = async (req: Request, res: Response) => {
 	try {
 		const { firstName, lastName, email, password, confirmPassword } = req.body;
 
@@ -18,7 +18,7 @@ const signUpUser = async (req: Request, res: Response) => {
 
 		const { confirmPassword: _, ...createUserData } = req.body;
 
-		const user = await createUser(createUserData);
+		const user = await createUserService(createUserData);
 
 		if (user) {
 			return res.status(201).json(user);
@@ -32,4 +32,4 @@ const signUpUser = async (req: Request, res: Response) => {
 	}
 };
 
-export default signUpUser;
+export default signUpUserController;

@@ -1,19 +1,12 @@
 import { Request, Response } from "express";
-import prisma from "../../db/prisma";
+import getCurrentUserService from "../../services/authServices/getCurrentUser.service";
 
-const getMe = async (req: Request, res: Response) => {
+const getCurrentUserController = async (req: Request, res: Response) => {
 	if (!req.user) {
 		return res.status(401).json({ message: "Unauthorized" });
 	}
 	try {
-		const user = await prisma.user.findUnique({
-			where: { id: req.user.id },
-			select: {
-				id: true,
-				firstName: true,
-				lastName: true,
-			},
-		});
+		const user = await getCurrentUserService(req.user.id);
 
 		if (!user) {
 			return res.status(404).json({ error: "User not found" });
@@ -26,4 +19,4 @@ const getMe = async (req: Request, res: Response) => {
 	}
 };
 
-export default getMe;
+export default getCurrentUserController;

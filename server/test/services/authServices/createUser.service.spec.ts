@@ -1,7 +1,7 @@
 import bcryptjs from "bcryptjs";
 import prisma from "../../../src/db/prisma";
 import { jest } from "@jest/globals";
-import createUser from "../../../src/services/authServices/createUser";
+import createUserService from "../../../src/services/authServices/createUser.service";
 
 jest.mock("bcryptjs");
 
@@ -28,14 +28,14 @@ describe("createUser service tests", () => {
 	it("should hash the password", async () => {
 		const rounds = 10;
 
-		await createUser(createUserData);
+		await createUserService(createUserData);
 
 		expect(bcryptjs.genSalt).toHaveBeenCalledWith(rounds);
 		expect(bcryptjs.hash).toHaveBeenCalledWith(createUserData.password, "salt");
 	});
 
 	it("should create a user with hashed password", async () => {
-		await createUser(createUserData);
+		await createUserService(createUserData);
 
 		expect(prisma.user.create).toHaveBeenCalledTimes(1);
 		expect(prisma.user.create).toHaveBeenCalledWith({
@@ -52,7 +52,7 @@ describe("createUser service tests", () => {
 			password?: string;
 		};
 
-		const user: TestUser = await createUser(createUserData);
+		const user: TestUser = await createUserService(createUserData);
 
 		expect(user.password).toBeUndefined();
 	});
