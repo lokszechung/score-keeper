@@ -24,7 +24,7 @@ const logInUserController = async (req: Request, res: Response) => {
 		if (error.message === "Invalid credentials") {
 			return res.status(400).json({ message: "Invalid credentials" });
 		}
-		res.status(500).json({ error: "Internal server error" });
+		return res.status(500).json({ error: "Internal server error" });
 	}
 };
 

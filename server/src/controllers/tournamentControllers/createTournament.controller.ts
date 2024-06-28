@@ -3,15 +3,18 @@ import createTournamentService from "../../services/tournamentServices/createTou
 
 const createTournamentController = async (req: Request, res: Response) => {
 	try {
-		const { name, startDateTime, format } = req.body;
+		const { format } = req.body;
 
 		if (!req.user) {
 			return res.status(401).json({ message: "Unauthorized - Please log in" });
 		}
 
-		if (!name || !startDateTime || !format) {
+		const requiredFields = ["name", "startDateTime", "format"];
+		const missingFields = requiredFields.filter((field) => !req.body[field]);
+
+		if (missingFields.length > 0) {
 			return res.status(400).json({
-				message: "Missing fields: name, startDateTime, format",
+				message: `Missing fields: ${missingFields.join(", ")}`,
 			});
 		}
 

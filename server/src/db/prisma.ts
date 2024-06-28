@@ -20,6 +20,8 @@ switch (environment) {
 
 process.env.DATABASE_URL = databaseUrl;
 
+//? Try omit option later, didn't work on 28/06/24 despite uodating to latest version of prisma and prisma client
+// const prisma = new PrismaClient({ omit: { user: { password: true } } });
 const prisma = new PrismaClient();
 
 export default prisma;

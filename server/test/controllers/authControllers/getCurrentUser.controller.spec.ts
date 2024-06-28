@@ -1,13 +1,11 @@
 import { jest } from "@jest/globals";
 import { Request, Response } from "express";
 import getCurrentUserController from "../../../src/controllers/authControllers/getCurrentUser.controller";
-import getCurrentUserService from "../../../src/services/authServices/getCurrentUser.service";
+import getUserService from "../../../src/services/authServices/getUser.service";
 
-jest.mock("../../../src/services/authServices/getCurrentUser.service");
+jest.mock("../../../src/services/authServices/getUser.service");
 
-const mockGetCurrentUserService = getCurrentUserService as jest.Mock<
-	typeof getCurrentUserService
->;
+const mockGetUserService = getUserService as jest.Mock<typeof getUserService>;
 
 describe("getCurrentUser controller tests", () => {
 	let res: Partial<Response>;
@@ -39,7 +37,7 @@ describe("getCurrentUser controller tests", () => {
 	it("should return 404 if user not found in the database", async () => {
 		req.user = { id: "1" };
 
-		mockGetCurrentUserService.mockResolvedValue(null);
+		mockGetUserService.mockResolvedValue(null);
 
 		await getCurrentUserController(req as Request, res as Response);
 
@@ -50,11 +48,11 @@ describe("getCurrentUser controller tests", () => {
 	it("should return 200 if user is found in the database", async () => {
 		req.user = { id: "1" };
 
-		mockGetCurrentUserService.mockResolvedValue({
+		mockGetUserService.mockResolvedValue({
 			id: "1",
 			firstName: "John",
 			lastName: "Doe",
-		});
+		} as never);
 
 		await getCurrentUserController(req as Request, res as Response);
 

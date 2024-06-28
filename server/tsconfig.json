@@ -14,7 +14,6 @@
     "isolatedModules": false,
     "useDefineForClassFields": true,
     "skipLibCheck": true,
-    "types": ["jest"],
     "allowJs": true,
     "experimentalDecorators": true,
     "typeRoots": ["./node_modules/@types"],
