@@ -23,6 +23,7 @@ model User {
   createdAt            DateTime     @default(now())
   updatedAt            DateTime     @updatedAt
   organisedTournaments Tournament[]
+  createdTeams         Team[]
 }
 
 model Tournament {
@@ -46,9 +47,13 @@ model Team {
   updatedAt    DateTime   @updatedAt
   tournamentId String
   tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  ownerId      String?
+  owner        User?      @relation(fields: [ownerId], references: [id])
   players      Player[]
   homeMatches  Match[]    @relation("HomeTeam")
   awayMatches  Match[]    @relation("AwayTeam")
+
+  @@unique([name, tournamentId])
 }
 
 model Player {
