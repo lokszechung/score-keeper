@@ -14,7 +14,7 @@ export const loginService = async ({
 		const { data } = await axios.post<AuthUserType>(`${apiRootUrl}auth/login`, {
 			email,
 			password,
-		});
+		}, { withCredentials: true });
 
 		console.log(data);
 		console.log("Logged in!!");
