@@ -14,7 +14,7 @@ const getCurrentUserController = async (req: Request, res: Response) => {
 
 		return res.status(200).json(user);
 	} catch (error) {
-		console.error("Error in getMe controller", error);
+		console.error("Error in getCurrentUser controller", error);
 		return res.status(500).json({ error: "Internal server error" });
 	}
 };

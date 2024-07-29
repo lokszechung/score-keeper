@@ -30,19 +30,14 @@ describe("signUpUser controller tests", () => {
 	});
 
 	it("should return 400 if any field is missing", async () => {
-		req.body = {
-			firstName: "John",
-			email: "john.doe@example.com",
-			password: "password",
-			confirmPassword: "password",
-		};
+		req.body = {};
 
 		await signUpUserController(req as Request, res as Response);
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
 			message:
-				"All fields are required: firstName, lastName, email, password, confirmPassword",
+				"Missing fields: firstName, lastName, email, password, confirmPassword",
 		});
 	});
 

@@ -2,7 +2,7 @@ import prisma from "../../db/prisma";
 
 type CreateTeamData = {
 	name: string;
-	ownerId: string;
+	addedById: string;
 	tournamentId: string;
 };
 

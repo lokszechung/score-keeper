@@ -5,7 +5,7 @@ const getTournamentService = async (tournamentId: string) => {
 		where: { id: tournamentId },
 		include: {
 			teams: true,
-			matches: true,
+			fixtures: true,
 		},
 	});
 

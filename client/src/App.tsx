@@ -1,35 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from "react-router-dom";
+
+import SettingsView from "./views/settings-view/SettingsView";
+import BottomNav from "./components/bottomNav/BottomNav";
+import LoginView from "./views/login-view/LoginView";
+import TournamentsView from "./views/tournament/tournaments-view/TournamentsView";
+import CreateTournamentView from "./views/tournament/create-tournament-view/CreateTournamentView";
+
+import "./App.css";
+// import { useAuthContext } from "./providers/AuthProvider";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	return (
+		<>
+			<BottomNav />
+			<Routes>
+				<Route path="/tournaments" element={<TournamentsView />} />
+				<Route path="/new-tournament" element={<CreateTournamentView />} />
+				<Route path="/settings" element={<SettingsView />} />
+				<Route path="/login" element={<LoginView />} />
+			</Routes>
+		</>
+	);
 }
 
-export default App
+export default App;

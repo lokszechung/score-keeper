@@ -1,6 +1,5 @@
+import { Format } from "@prisma/client";
 import prisma from "../../db/prisma";
-
-type Format = "ROUND_ROBIN" | "KNOCK_OUT" | "LEAGUE" | "GROUP_KNOCK_OUT";
 
 type CreateTournamentData = {
 	name: string;

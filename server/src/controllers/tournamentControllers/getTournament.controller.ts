@@ -3,6 +3,7 @@ import getTournamentService from "../../services/tournamentServices/getTournamen
 
 const getTournamentController = async (req: Request, res: Response) => {
 	const { tournamentId } = req.params;
+
 	try {
 		const tournament = await getTournamentService(tournamentId);
 

@@ -2,20 +2,27 @@ import { Request, Response } from "express";
 import createUserService from "../../services/authServices/createUser.service";
 
 const signUpUserController = async (req: Request, res: Response) => {
+	const requiredFields = [
+		"firstName",
+		"lastName",
+		"email",
+		"password",
+		"confirmPassword",
+	];
+	const missingFields = requiredFields.filter((field) => !req.body[field]);
+
+	if (missingFields.length > 0) {
+		return res.status(400).json({
+			message: `Missing fields: ${missingFields.join(", ")}`,
+		});
+	}
+
+	const { password, confirmPassword } = req.body;
+
+	if (password !== confirmPassword) {
+		return res.status(400).json({ message: "Passwords do not match" });
+	}
 	try {
-		const { firstName, lastName, email, password, confirmPassword } = req.body;
-
-		if (!firstName || !lastName || !email || !password || !confirmPassword) {
-			return res.status(400).json({
-				message:
-					"All fields are required: firstName, lastName, email, password, confirmPassword",
-			});
-		}
-
-		if (password !== confirmPassword) {
-			return res.status(400).json({ message: "Passwords do not match" });
-		}
-
 		const { confirmPassword: _, ...createUserData } = req.body;
 
 		const user = await createUserService(createUserData);

@@ -1,0 +1,10 @@
+.bottom-nav{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: lightblue;
+}
+
+.nav-link{
+  border: 1px solid black;
+}
